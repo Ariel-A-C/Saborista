@@ -17,10 +17,13 @@ async function registerUser() {
 
         if (response.ok) {
             console.log('User registered successfully');
-            // Handle successful registration
+            alert('Usuario registrado correctamente');
+
+            window.location.href = 'iniciar_sesion.html';
+
         } else {
             console.error('Failed to register user');
-            // Handle registration failure, show an error message, etc.
+            alert('ERROR: el nombre de usuario ya está en uso');
         }
     } catch (error) {
         console.error('Error:', error);
