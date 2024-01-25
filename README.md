@@ -1,10 +1,4 @@
-# Terminal commands
-
-$ docker exec -it mymongo bash
-$ mongosh
-$ use appdb
-
-## MongoDB commands
+# MongoDB commands
 
 db.users.find()
 db.users.insertOne({name: "Sally", age: 19, address: { street: "987 North St" }, hobbies: ["Running"] })
