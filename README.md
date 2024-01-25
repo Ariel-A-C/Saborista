@@ -1,6 +1,4 @@
-# Falta el node_modules que no se puede subir al GitHub por ser demasiado grande
-
-## Terminal commands
+# Terminal commands
 
 $ docker exec -it mymongo bash
 $ mongosh

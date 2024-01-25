@@ -1,88 +1,72 @@
 const express = require('express');
-const { WebSocketServer } = require('ws');
-const http = require('http');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-
 const app = express();
-const server = http.createServer(app);
-const wss = new WebSocketServer({ server });
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/appdb', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+// Add these lines to parse JSON data in the request body
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+mongoose.connect("mongodb+srv://admin:admin@clustersaboristav2.nmetz.mongodb.net/Saborista?retryWrites=true&w=majority");
+
+const db = mongoose.connection;
+
+db.on('error', (err) => {
+    console.error('Failed to connect to MongoDB:', err);
 });
 
-app.use(bodyParser.json());
-
-// Define a user schema
-const userSchema = new mongoose.Schema({
-    username: String,
-    password: String,
+db.once('open', () => {
+    console.log('Connected to MongoDB');
+    // Start your server here or perform any other setup
 });
 
-const User = mongoose.model('User', userSchema);
-
-wss.on('connection', (ws) => {
-    ws.on('message', async (message) => {
-        try {
-            const data = JSON.parse(message);
-
-            // Check the message type (e.g., registration)
-            if (data.type === 'register') {
-                // Create a new user in the database
-                const newUser = new User({
-                    username: data.username,
-                    password: data.password,
-                });
-
-                await newUser.save();
-
-                // Broadcast the updated user list to all clients
-                wss.clients.forEach((client) => {
-                    client.send(JSON.stringify({ type: 'userListUpdate' }));
-                });
-            }
-        } catch (error) {
-            console.error('Error processing message:', error);
-        }
-    });
+const UserSchema = new mongoose.Schema({
+    name: String,
+    password: String
 });
 
-app.use(express.static('public'));
+const UserModel = mongoose.model("usuarios", UserSchema);
 
-// Define your HTTP routes here
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
-
-app.post('/api/register', async (req, res) => {
+app.post("/getUsuarios", async (req, res) => {
     try {
-        const { username, password } = req.body;
+        console.log("holaaa");
+        const usuarios = await UserModel.find({});
+        console.log("found usuarios");
+        res.json(usuarios);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
-        // Create a new user in the database
-        const newUser = new User({
-            username,
-            password,
-        });
+app.post("/registerUser", async (req, res) => {
+    const { name, password } = req.body;
+    console.log('Received data on the server:', { name, password });
 
+    try {
+        // Check if the username already exists
+        const existingUser = await UserModel.findOne({ name });
+
+        if (existingUser) {
+            console.log('Username already exists');
+            return res.status(400).json({ error: 'Username already exists' });
+        }
+
+        // Create a new user
+        const newUser = new UserModel({ name, password });
         await newUser.save();
 
+        console.log('User registered successfully');
         res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        console.error('Error registering user:', error);
+    } catch (err) {
+        console.error('Error during registration:', err);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// Client-side JavaScript
-app.get('/registro.html', (req, res) => {
-    res.sendFile(__dirname + '/registro.html');
-});
 
-const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+app.use(express.static("public"));
+
+app.listen(3000, () => {
+    console.log("Server is running");
 });
