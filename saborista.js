@@ -1,3 +1,5 @@
+// saborista.js
+
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
@@ -20,39 +22,34 @@ db.once('open', () => {
 });
 
 const UserSchema = new mongoose.Schema({
-    name: String,
-    password: String
+    ID: Number,
+    username: String,
+    password: String,
+    isAdmin: { type: Boolean, default: false }
 });
 
 const UserModel = mongoose.model("usuarios", UserSchema);
 
-app.post("/getUsuarios", async (req, res) => {
-    try {
-        console.log("holaaa");
-        const usuarios = await UserModel.find({});
-        console.log("found usuarios");
-        res.json(usuarios);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-});
-
 app.post("/registerUser", async (req, res) => {
-    const { name, password } = req.body;
-    console.log('Received data on the server:', { name, password });
+    const { username, password } = req.body;
+    console.log('Received data on the server:', { username, password });
 
     try {
         // Check if the username already exists
-        const existingUser = await UserModel.findOne({ name });
+        const existingUser = await UserModel.findOne({ username });
 
         if (existingUser) {
             console.log('Username already exists');
             return res.status(400).json({ error: 'Username already exists' });
         }
 
+        // Find the max ID and increment by 1
+        const maxIDUser = await UserModel.findOne({}).sort({ ID: -1 });
+        const maxID = maxIDUser ? maxIDUser.ID : 0;
+        const newUserID = maxID + 1;
+
         // Create a new user
-        const newUser = new UserModel({ name, password });
+        const newUser = new UserModel({ ID: newUserID, username, password });
         await newUser.save();
 
         console.log('User registered successfully');
@@ -62,8 +59,6 @@ app.post("/registerUser", async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
-
 
 app.use(express.static("public"));
 
