@@ -5,21 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saborista.net - Iniciar Sesión</title>
-    <link rel="stylesheet" href="CSS/home.css">
+    <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="CSS/login_registro.css">
+    <script src="JS/script.js" defer></script>
 </head>
 
 <body>
     <header>
         <nav>
-            <img src="Imagenes/FotoLogo.png" alt="Logo">
+            <img src="imagenes/FotoLogo.png" alt="Logo">
             <ul>
                 <li><a href="home.html">Inicio</a></li>
                 <li><a href="recetas.html">Recetas</a></li>
-                <li><a href="añadir_receta.html">Añadir Receta</a></li>
-                <li><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
-                <li><a href="registro.html">Registrarse</a></li>
-                <li><img src="Imagenes/user.png" href="perfil.html"></li>
+                <li id="addRecipeLink" style="display: none;"><a href="añadir_receta.html">Añadir Receta</a></li>
+                <li id="loginLink"><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
+                <li id="registerLink"><a href="registro.html">Registrarse</a></li>
+                <li id="profileLink" style="display: none;"><a href="perfil.html"><img src="Imagenes/user.png"
+                            alt="Perfil"></a></li>
             </ul>
         </nav>
     </header>
@@ -35,6 +37,44 @@
     </form>
     <p>¿Ya tienes una cuenta? <a href="iniciar_sesion.html">Identificate aquí</a>.</p>
 </body>
-<script src="JS/registro.js"></script>
+<script>
+    async function registerUser() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            console.log('Data being sent:', JSON.stringify({ username, password }));
+
+            const response = await fetch('/registerUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            console.log(response);
+
+            if (response.ok) {
+                console.log('User registered successfully');
+                alert('Usuario registrado correctamente');
+
+                window.location.href = 'iniciar_sesion.html';
+
+            } else {
+                console.error('Failed to register user');
+                alert('ERROR: el nombre de usuario ya está en uso');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    document.getElementById('registrationForm').addEventListener('submit', function (event) {
+        console.log('Registration');
+        event.preventDefault();
+        registerUser();
+    });
+</script>
 
 </html>

@@ -1,12 +1,12 @@
-// saborista.js
-
 const express = require('express');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser'); // Import the cookie-parser middleware
+
 const app = express();
 
-// Add these lines to parse JSON data in the request body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser()); // Use the cookie-parser middleware
 
 mongoose.connect("mongodb+srv://admin:admin@clustersaboristav2.nmetz.mongodb.net/Saborista?retryWrites=true&w=majority");
 
@@ -59,6 +59,59 @@ app.post("/registerUser", async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+app.post("/loginUser", async (req, res) => {
+    const { username, password } = req.body;
+    console.log('Received login data:', { username, password });
+
+    try {
+        // Find the user in the database
+        const user = await UserModel.findOne({ username });
+
+        if (!user || user.password !== password) {
+            console.log('Invalid username or password');
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
+
+        // Set the user information in a cookie
+        res.cookie('user', JSON.stringify({ username, isAdmin: user.isAdmin }));
+
+        console.log('Login successful');
+        res.status(200).json({ message: 'Login successful' });
+    } catch (err) {
+        console.error('Error during login:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
+app.get("/getUserInfo", async (req, res) => {
+    try {
+        // Decode the user token from the Authorization header
+        const userToken = req.headers.authorization.split('=')[1];
+
+        // Decode the user token (this is a simple decoding, you might want to use a more secure method)
+        const decodedUserToken = JSON.parse(decodeURIComponent(userToken));
+
+        // Find the user in the database based on the decoded token
+        const user = await UserModel.findOne({ username: decodedUserToken.username });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Return the user information
+        res.status(200).json({
+            username: user.username,
+            password: user.password,
+            isAdmin: user.isAdmin,
+        });
+    } catch (err) {
+        console.error('Error fetching user information:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 
 app.use(express.static("public"));
 
