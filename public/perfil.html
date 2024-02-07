@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saborista.net - Perfil</title>
+    <title>Saborista - Perfil</title>
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="CSS/perfil.css">
     <script src="JS/script.js" defer></script>
@@ -12,16 +12,18 @@
 
 <body>
     <header>
-        <nav>
-            <img src="imagenes/FotoLogo.png" alt="Logo">
-            <ul>
+        <nav class="nav-header">
+            <a href="home.html">
+                <img src="imagenes/FotoLogo.png" alt="Logo" class="logo-header">
+            </a>
+            <ul class="ul-header" id="navList">
                 <li><a href="home.html">Inicio</a></li>
                 <li><a href="recetas.html">Recetas</a></li>
                 <li id="addRecipeLink" style="display: none;"><a href="añadir_receta.html">Añadir Receta</a></li>
                 <li id="loginLink"><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
-                <li id="registerLink"><a href="registro.html">Registrarse</a></li>
                 <li id="profileLink" style="display: none;"><a href="perfil.html"><img src="Imagenes/user.png"
-                            alt="Perfil"></a></li>
+                            alt="Perfil"></a>
+                </li>
             </ul>
         </nav>
     </header>
@@ -29,38 +31,42 @@
     <div id="userInfo">
         <!-- User information will be displayed here -->
     </div>
+    <button id="logoutButton" class="logout-button">Cerrar Sesión</button>
 
-    <script>
-        // Check if the user cookie exists
-        const userCookieProfile = document.cookie.split(';').find(cookie => cookie.trim().startsWith('user='));
-
-        if (userCookieProfile) {
-            // If the user cookie exists, show the "Añadir Receta" link and hide login and registration links
-            document.getElementById('addRecipeLink').style.display = 'block';
-            document.getElementById('loginLink').style.display = 'none';
-            document.getElementById('registerLink').style.display = 'none';
-
-            // Fetch user information from the server
-            fetch('/getUserInfo', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': userCookieProfile, // Send the user cookie as Authorization header
-                },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // Display user information
-                    document.getElementById('userInfo').innerHTML = `
-                    <ul>
-                        <li><strong>Usuario:</strong> ${data.username}</li>
-                        <li><strong>Contraseña:</strong> ${data.password}</li>
-                        <li><strong>isAdmin:</strong> ${data.isAdmin}</li>
-                    </ul>`;
-                })
-                .catch(error => console.error('Error fetching user information:', error));
-        }
-    </script>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Saborista.net | Todos los derechos reservados.</p>
+            <p>Contacto: info@saborista.net</p>
+        </div>
+    </footer>
 </body>
+<script>
+    const userCookieProfile = document.cookie.split(';').find(cookie => cookie.trim().startsWith('user='));
+
+    fetch('/getUserInfo', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': userCookieProfile,
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            // Display user information in a box
+            const userInfoBox = document.getElementById('userInfo');
+            userInfoBox.innerHTML = `
+            <div class="user-info">
+                <p class="user-info-item"><strong>Usuario:</strong> ${data.username}</p>
+                <p class="user-info-item"><strong>Contraseña:</strong> ${data.password}</p>
+                <p class="user-info-item"><strong>isAdmin:</strong> ${data.isAdmin}</p>
+            </div>`;
+        })
+        .catch(error => console.error('Error fetching user information:', error));
+
+    document.getElementById('logoutButton').addEventListener('click', () => {
+        document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        window.location.href = 'home.html';
+    });
+</script>
 
 </html>

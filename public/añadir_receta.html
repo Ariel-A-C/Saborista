@@ -4,30 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saborista.net - Iniciar Sesión</title>
+    <title>Saborista - Añadir receta</title>
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="CSS/añadir_receta.css">
     <script src="JS/script.js" defer></script>
+    <script src="JS/añadir_receta.js" defer></script>
 </head>
 
 <body>
     <header>
-        <nav>
-            <img src="imagenes/FotoLogo.png" alt="Logo">
-            <ul>
+        <nav class="nav-header">
+            <a href="home.html">
+                <img src="imagenes/FotoLogo.png" alt="Logo" class="logo-header">
+            </a>
+            <ul class="ul-header" id="navList">
                 <li><a href="home.html">Inicio</a></li>
                 <li><a href="recetas.html">Recetas</a></li>
                 <li id="addRecipeLink" style="display: none;"><a href="añadir_receta.html">Añadir Receta</a></li>
                 <li id="loginLink"><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
-                <li id="registerLink"><a href="registro.html">Registrarse</a></li>
                 <li id="profileLink" style="display: none;"><a href="perfil.html"><img src="Imagenes/user.png"
-                            alt="Perfil"></a></li>
+                            alt="Perfil"></a>
+                </li>
             </ul>
         </nav>
     </header>
     <h1>Añadir Receta</h1>
 
-    <form id="recetaForm">
+    <form id="recetaForm" action="/guardarReceta" method="POST" enctype="multipart/form-data">
         <label for="nombre">Nombre de la receta:</label>
         <input type="text" id="nombre" name="nombre" required>
 
@@ -59,7 +62,6 @@
         <ul id="pasosList">
             <li>
                 <input type="text" name="paso_nombre[]" required>
-                <textarea name="paso_descripcion[]" required></textarea>
                 <button type="button" onclick="eliminarCampo(this)" class="delete">Eliminar</button>
             </li>
         </ul>
@@ -68,65 +70,13 @@
         <input type="submit" value="Guardar Receta" class="save">
     </form>
 
-    <script>
-        function agregarCampo(listaId) {
-            var ul = document.getElementById(listaId);
-            var li = document.createElement("li");
-            var input = document.createElement("input");
-            input.type = "text";
-            input.name = listaId.includes("utensilios") ? "utensilio[]" : "ingrediente[]";
-            input.required = true;
-            li.appendChild(input);
 
-            // Agregar botón de eliminación
-            var deleteButton = document.createElement("button");
-            deleteButton.type = "button";
-            deleteButton.textContent = "Eliminar";
-            deleteButton.className = "delete"; // Agrega la clase "delete"
-            deleteButton.onclick = function () {
-                ul.removeChild(li);
-            };
-            li.appendChild(deleteButton);
-
-            ul.appendChild(li);
-        }
-
-        function agregarPaso() {
-            var ul = document.getElementById("pasosList");
-            var li = document.createElement("li");
-
-            var inputNombre = document.createElement("input");
-            inputNombre.type = "text";
-            inputNombre.name = "paso_nombre[]";
-            inputNombre.required = true;
-
-            var textareaDescripcion = document.createElement("textarea");
-            textareaDescripcion.name = "paso_descripcion[]";
-            textareaDescripcion.required = true;
-
-            li.appendChild(inputNombre);
-            li.appendChild(textareaDescripcion);
-
-            // Agregar botón de eliminación
-            var deleteButton = document.createElement("button");
-            deleteButton.type = "button";
-            deleteButton.textContent = "Eliminar";
-            deleteButton.className = "delete"; // Agrega la clase "delete"
-            deleteButton.onclick = function () {
-                ul.removeChild(li);
-            };
-            li.appendChild(deleteButton);
-
-            ul.appendChild(li);
-        }
-
-        function eliminarCampo(button) {
-            var li = button.parentNode;
-            var ul = li.parentNode;
-            ul.removeChild(li);
-        }
-    </script>
-
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Saborista.net | Todos los derechos reservados.</p>
+            <p>Contacto: info@saborista.net</p>
+        </div>
+    </footer>
 </body>
 
 </html>

@@ -1,0 +1,40 @@
+.recipe-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    width: 1300px;
+    margin: 20px auto 50px;
+    gap: 50px;
+}
+
+.recipe {
+    width: 100%;
+    max-width: 400px;
+    font-family: 'Besley', sans-serif;
+    font-size: 24px;
+    padding: 15px;
+    text-align: center;
+}
+
+.recipe p {
+    margin: 0;
+    font-weight: 500;
+}
+
+.recipe img {
+    width: 100%;
+    height: 100%;
+    width: 400px;
+    height: 300px;
+    object-fit: cover;
+}
+
+.rating {
+    color: #ffcc00;
+}
+
+.star {
+    display: inline-block;
+    margin: 0 2px;
+    font-size: 24px;
+}

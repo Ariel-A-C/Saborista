@@ -1,55 +1,12 @@
-/* Añadir al archivo "añadir_receta.css" */
-
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    background-color: #ffffff;
-    color: #000000;
-    padding: 10px;
-    text-align: center;
-}
-
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-nav img {
-    max-height: 100px;
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-}
-
-nav li {
-    margin-right: 20px;
-}
-
-nav a {
-    text-decoration: none;
-    color: #000000;
-    font-weight: bold;
-}
-
-li img {
-    max-height: 40px;
-}
-
-h1, form {
+h1,
+form {
     margin: 20px;
     text-align: center;
 }
 
 form {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 0 auto 100px;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -69,13 +26,13 @@ input[type="file"] {
     box-sizing: border-box;
 }
 
-ul {
+form ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-ul li {
+form ul li {
     margin-bottom: 10px;
     display: flex;
     align-items: center;

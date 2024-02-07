@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saborista.net - Iniciar Sesión</title>
+    <title>Saborista.net - Inicio</title>
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="CSS/home.css">
     <script src="JS/script.js" defer></script>
@@ -12,19 +12,81 @@
 
 <body>
     <header>
-        <nav>
-            <img src="imagenes/FotoLogo.png" alt="Logo">
-            <ul>
+        <nav class="nav-header">
+            <a href="home.html">
+                <img src="imagenes/FotoLogo.png" alt="Logo" class="logo-header">
+            </a>
+            <ul class="ul-header" id="navList">
                 <li><a href="home.html">Inicio</a></li>
                 <li><a href="recetas.html">Recetas</a></li>
                 <li id="addRecipeLink" style="display: none;"><a href="añadir_receta.html">Añadir Receta</a></li>
                 <li id="loginLink"><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
-                <li id="registerLink"><a href="registro.html">Registrarse</a></li>
                 <li id="profileLink" style="display: none;"><a href="perfil.html"><img src="Imagenes/user.png"
-                            alt="Perfil"></a></li>
+                            alt="Perfil"></a>
+                </li>
             </ul>
         </nav>
     </header>
+    <div class="content">
+        <div class="recipe-of-the-day">
+            <h1>Receta del Día</h1>
+            <div class="recipe-day">
+                <img src="food-images/recipe-of-the-day.jpg" alt="Recipe of the Day">
+                <p class="recipe-name">arroz raro con salsa y los colores de un semáforo</p>
+                <div class="rating">
+                    <span class="star">&#9733;</span>
+                    <span class="star">&#9733;</span>
+                    <span class="star">&#9733;</span>
+                    <span class="star">&#9733;</span>
+                    <span class="star">&#9733;</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-row">
+            <div class="recipe">
+                <img src="food-images/recipe1.jpg" alt="Recipe 1">
+                <p class="recipe-name">la pasta de espirales esa con demasiado queso</p>
+                <div class="rating">
+                    <span class="star">&#9733;</span>
+                    <span class="star">&#9733;</span>
+                    <span class="star">&#9733;</span>
+                    <span class="star">&#9733;</span>
+                    <span class="star">&#9734;</span>
+                </div>
+            </div>
+
+            <div class="recipe">
+                <img src="food-images/recipe2.jpg" alt="Recipe 2">
+                <p class="recipe-name">tarta de sabor a tarta</p>
+                <div class="rating">
+                    <span class="star">&#9733;</span>
+                    <span class="star">&#9733;</span>
+                    <span class="star">&#9733;</span>
+                    <span class="star">&#9734;</span>
+                    <span class="star">&#9734;</span>
+                </div>
+            </div>
+
+            <div class="recipe">
+                <img src="food-images/recipe3.jpg" alt="Recipe 3">
+                <p class="recipe-name">sopa horrible llena de cosas</p>
+                <div class="rating">
+                    <span class="star">&#9733;</span>
+                    <span class="star">&#9733;</span>
+                    <span class="star">&#9734;</span>
+                    <span class="star">&#9734;</span>
+                    <span class="star">&#9734;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Saborista.net | Todos los derechos reservados.</p>
+            <p>Contacto: info@saborista.net</p>
+        </div>
 </body>
 
 </html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saborista.net - Iniciar Sesión</title>
+    <title>Saborista - Iniciar Sesión</title>
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="CSS/login_registro.css">
     <script src="JS/script.js" defer></script>
@@ -12,16 +12,18 @@
 
 <body>
     <header>
-        <nav>
-            <img src="imagenes/FotoLogo.png" alt="Logo">
-            <ul>
+        <nav class="nav-header">
+            <a href="home.html">
+                <img src="imagenes/FotoLogo.png" alt="Logo" class="logo-header">
+            </a>
+            <ul class="ul-header" id="navList">
                 <li><a href="home.html">Inicio</a></li>
                 <li><a href="recetas.html">Recetas</a></li>
                 <li id="addRecipeLink" style="display: none;"><a href="añadir_receta.html">Añadir Receta</a></li>
                 <li id="loginLink"><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
-                <li id="registerLink"><a href="registro.html">Registrarse</a></li>
                 <li id="profileLink" style="display: none;"><a href="perfil.html"><img src="Imagenes/user.png"
-                            alt="Perfil"></a></li>
+                            alt="Perfil"></a>
+                </li>
             </ul>
         </nav>
     </header>
@@ -35,45 +37,51 @@
 
         <button type="submit">Iniciar Sesión</button>
     </form>
-    <p>¿No tienes una cuenta? <a href="registro.html">Regístrate aquí</a>.</p>
+    <p class="mensaje">¿No tienes una cuenta? <a href="registro.html">Regístrate aquí</a>.</p>
 
-    <script>
-        async function loginUser() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            try {
-                console.log('Data being sent:', JSON.stringify({ username, password }));
-
-                const response = await fetch('/loginUser', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password }),
-                });
-
-                console.log(response);
-
-                if (response.ok) {
-                    console.log('Login successful');
-                    alert('Login successful');
-                } else {
-                    console.error('Failed to login');
-                    alert('Login failed. Check your username and password.');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-
-        document.getElementById('loginForm').addEventListener('submit', function (event) {
-            console.log('Login');
-            event.preventDefault();
-            loginUser();
-        });
-
-    </script>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Saborista.net | Todos los derechos reservados.</p>
+            <p>Contacto: info@saborista.net</p>
+        </div>
+    </footer>
 </body>
+<script>
+    async function loginUser() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            console.log('Data being sent:', JSON.stringify({ username, password }));
+
+            const response = await fetch('/loginUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            console.log(response);
+
+            if (response.ok) {
+                console.log('Login successful');
+                alert('Login successful');
+                window.location.href = 'perfil.html';
+            } else {
+                console.error('Failed to login');
+                alert('Login failed. Check your username and password.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function (event) {
+        console.log('Login');
+        event.preventDefault();
+        loginUser();
+    });
+</script>
 
 </html>
