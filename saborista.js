@@ -170,23 +170,28 @@ app.get("/getUserInfo", async (req, res) => {
     try {
         const userToken = req.headers.authorization.split('=')[1];
         const decodedUserToken = JSON.parse(decodeURIComponent(userToken));
+        const username = decodedUserToken.username;
 
-        const user = await UserModel.findOne({ username: decodedUserToken.username });
+        const user = await UserModel.findOne({ username });
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
+        const userRecipes = await RecetaModel.find({ Username: username }, { Nombre: 1, customID: 1, _id: 0 }); // Include customID field
+
         res.status(200).json({
             username: user.username,
-            password: user.password,
             isAdmin: user.isAdmin,
+            recipes: userRecipes
         });
     } catch (err) {
         console.error('Error fetching user information:', err);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+
 
 app.listen(3000, () => {
     console.log("Server is running");

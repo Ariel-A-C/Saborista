@@ -31,16 +31,16 @@
     <h1>Añadir Receta</h1>
 
     <form id="recetaForm" action="/guardarReceta" method="POST" enctype="multipart/form-data">
-        <label for="nombre">Nombre de la receta:</label>
+        <label for="nombre">Nombre de la receta</label>
         <input type="text" id="nombre" name="nombre" required>
 
-        <label for="imagen">Imagen:</label>
+        <label for="imagen">Imagen</label>
         <input type="file" id="imagen" name="imagen" accept="image/*" required>
 
-        <label for="descripcion">Descripción:</label>
+        <label for="descripcion">Descripción</label>
         <textarea id="descripcion" name="descripcion" required></textarea>
 
-        <label for="utensilios">Utensilios:</label>
+        <label for="utensilios">Utensilios</label>
         <ul id="utensiliosList">
             <li>
                 <input type="text" name="utensilio[]" required>
@@ -49,7 +49,7 @@
         </ul>
         <button type="button" onclick="agregarCampo('utensiliosList')">Agregar Utensilio</button>
 
-        <label for="ingredientes">Ingredientes:</label>
+        <label for="ingredientes">Ingredientes</label>
         <ul id="ingredientesList">
             <li>
                 <input type="text" name="ingrediente[]" required>
@@ -58,7 +58,7 @@
         </ul>
         <button type="button" onclick="agregarCampo('ingredientesList')">Agregar Ingrediente</button>
 
-        <label for="pasos">Pasos:</label>
+        <label for="pasos">Pasos</label>
         <ul id="pasosList">
             <li>
                 <input type="text" name="paso_nombre[]" required>
@@ -67,7 +67,11 @@
         </ul>
         <button type="button" onclick="agregarPaso()">Agregar Paso</button>
 
-        <input type="submit" value="Guardar Receta" class="save">
+        <ul class="guardar">
+            <input type="submit" value="Añadir Receta" class="save">
+        </ul>
+
+
     </form>
 
 

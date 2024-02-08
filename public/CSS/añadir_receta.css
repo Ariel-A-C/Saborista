@@ -8,22 +8,36 @@ form {
     max-width: 600px;
     margin: 0 auto 100px;
     padding: 20px;
-    border: 1px solid #ddd;
+    border: 1px solid #f2f2f2;
     border-radius: 8px;
+    font-size: 24px;
+    box-shadow: 0 0 10px 5px rgba(127, 72, 41, 0.3);
+    background-color: #fff8e7;
 }
 
 label {
     display: block;
-    margin: 10px 0;
+    margin: 20px 0 10px;
 }
 
 input[type="text"],
-textarea,
-input[type="file"] {
+textarea {
     width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
     box-sizing: border-box;
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 18px;
+}
+
+input[type="file"] {
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 14px;
+    width: fit-content;
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
 }
 
 form ul {
@@ -33,43 +47,42 @@ form ul {
 }
 
 form ul li {
-    margin-bottom: 10px;
     display: flex;
     align-items: center;
+    margin-bottom: 10px;
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #995935;
     color: white;
     padding: 10px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     margin-left: 5px;
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 16px;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #7F4829;
 }
 
 button.delete {
-    background-color: #ff6347;
+    background-color: #ff5f43ec;
 }
 
 button.delete:hover {
-    background-color: #ff473a;
+    background-color: #fa3c2e;
 }
 
-button.save {
-    background-color: #008CBA;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
+.guardar {
+    margin: 50px 0 20px;
+}
+
+.guardar input {
+    font-size: 20px;
+    font-family: 'Roboto Slab', sans-serif;
+    padding: 5px 10px;
     cursor: pointer;
-    margin-top: 10px;
-}
-
-button.save:hover {
-    background-color: #0077A6;
 }

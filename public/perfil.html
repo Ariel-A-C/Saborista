@@ -31,6 +31,14 @@
     <div id="userInfo">
         <!-- User information will be displayed here -->
     </div>
+
+    <div id="userRecipes" class="userRecipes">
+        <h2>Recetas del usuario</h2>
+        <ul id="userRecipesList" class="userRecipesList">
+            <!-- User recipes will be displayed here -->
+        </ul>
+    </div>
+
     <button id="logoutButton" class="logout-button">Cerrar Sesión</button>
 
     <footer>
@@ -55,11 +63,23 @@
             // Display user information in a box
             const userInfoBox = document.getElementById('userInfo');
             userInfoBox.innerHTML = `
-            <div class="user-info">
-                <p class="user-info-item"><strong>Usuario:</strong> ${data.username}</p>
-                <p class="user-info-item"><strong>Contraseña:</strong> ${data.password}</p>
-                <p class="user-info-item"><strong>isAdmin:</strong> ${data.isAdmin}</p>
-            </div>`;
+    <div class="user-info">
+        <p class="user-info-item"><strong>Usuario:</strong> ${data.username}</p>
+        <p class="user-info-item"><strong>isAdmin:</strong> ${data.isAdmin}</p>
+    </div>`;
+
+            // Display user recipes
+            const userRecipesList = document.getElementById('userRecipesList');
+            userRecipesList.classList.add('recipes-list');
+            data.recipes.forEach(recipe => {
+                const recipeItem = document.createElement('li');
+                const recipeLink = document.createElement('a');
+                recipeLink.href = `receta.html?id=${recipe.customID}`; // Using customID for the URL
+                recipeLink.textContent = recipe.Nombre;
+                recipeLink.classList.add('recipe-link'); // Add a class to style the link if needed
+                recipeItem.appendChild(recipeLink);
+                userRecipesList.appendChild(recipeItem);
+            });
         })
         .catch(error => console.error('Error fetching user information:', error));
 

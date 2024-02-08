@@ -10,12 +10,36 @@
 
 .user-info {
     max-width: 300px;
-    margin: 0 auto;
+    margin: 50px auto;
 }
 
 .user-info-item {
     margin: 10px 0;
-    font-size: 24px;
+    font-size: 36px;
+}
+
+.userRecipes h2 {
+    font-family: 'Besley', sans-serif;
+    font-size: 48px;
+    text-decoration: underline;
+    margin-bottom: 0px;
+}
+
+.recipes-list {
+    list-style: none;
+    /* Remove bullet dots */
+    padding: 0;
+    font-size: 32px;
+    margin: 0 auto;
+}
+
+.recipe-link {
+    text-decoration: none;
+    color: #000;
+}
+
+.recipe-link:hover {
+    text-decoration: underline;
 }
 
 .logout-button {
@@ -25,10 +49,10 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-family: 'Besley', sans-serif;
-    font-size: 18px;
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 24px;
     margin-top: 50px;
-    margin-bottom: 150px;
+    margin-bottom: 100px;
 }
 
 .logout-button:hover {

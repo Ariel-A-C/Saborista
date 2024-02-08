@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             const recipeUtensilios = createSection('Utensilios', document.createElement('p'), 'utensilios');
-            recipeUtensilios.querySelector('p').textContent = `Utensilios: ${recipe.Utensilios.join(', ')}`;
+            recipeUtensilios.querySelector('p').textContent = `${recipe.Utensilios.join(' - ')}`;
 
             const recipeIngredientes = createSection('Ingredientes', document.createElement('ul'), 'ingredientes');
             recipe.Ingredientes.forEach(ingrediente => {
