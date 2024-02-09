@@ -3,4 +3,5 @@ if (userCookie) {
     document.getElementById('addRecipeLink').style.display = 'block';
     document.getElementById('profileLink').style.display = 'block';
     document.getElementById('loginLink').style.display = 'none';
+    document.getElementById('comment-form').style.display = 'block';
 }

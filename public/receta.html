@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saborista - Receta</title>
+    <link rel="icon" href="/imagenes/FotoLogo.png" type="image/png">
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="CSS/receta.css">
     <script src="JS/script.js" defer></script>
@@ -30,6 +31,15 @@
     </header>
 
     <div id="recipe-container" class="recipe-container"></div>
+
+    <div class="comment-section">
+        <h2 class="comments-h2">Comentarios</h2>
+        <div id="comments-container" class="comments-container"></div>
+        <form id="comment-form" class="comment-form" action="/saveComment" method="POST" enctype="multipart/form-data">
+            <input type="text" id="comment" name="comment" placeholder="Escribe tu comentario...">
+            <input type="submit" value="Enviar" class="save" id="send-comment" onclick="enviarMensaje()">
+        </form>
+    </div>
 
     <footer>
         <div class="footer-content">

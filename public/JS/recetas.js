@@ -15,7 +15,7 @@ fetch('http://localhost:3000/getRecipes')
             recipeLink.href = recipeUrl;
 
             const recipeImage = document.createElement('img');
-            recipeImage.src = recipe.Imagen;
+            recipeImage.src = `../${recipe.Imagen}`; // Update image source
             recipeImage.alt = recipe.Nombre;
             recipeImage.width = 400;
             recipeImage.height = 300;

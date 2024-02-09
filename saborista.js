@@ -2,8 +2,22 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
+const crypto = require('crypto');
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
+const { WebSocketServer } = require('ws');
+const http = require('http');
 
 const app = express();
+const server = http.createServer(app);
+const wss = new WebSocketServer({ server });
+wss.on('connection', (ws) => {
+    ws.on('message', (message) => {
+        wss.clients.forEach((client) => {
+            client.send(JSON.stringify(JSON.parse(message)));
+        });
+    });
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -78,6 +92,8 @@ app.post("/loginUser", async (req, res) => {
     }
 });
 
+
+// Define schema and model
 const RecetaSchema = new mongoose.Schema({
     customID: { type: Number, default: 1 },
     Username: String,
@@ -89,21 +105,28 @@ const RecetaSchema = new mongoose.Schema({
     Pasos: [String],
     Valoracion: { type: Number, default: 0 }
 });
-
 const RecetaModel = mongoose.model("recetas", RecetaSchema);
 
+// Multer storage configuration
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/food-images');
+        cb(null, 'public/uploads');
     },
     filename: function (req, file, cb) {
-        cb(null, file.originalname);
+        const randomName = uuidv4();
+        const fileName = `${randomName}.jpg`; // Define fileName here
+        cb(null, fileName);
+        return fileName; // Return fileName
     }
 });
 
 const upload = multer({ storage: storage });
 
 app.post("/guardarReceta", upload.single('imagen'), async (req, res) => {
+    const fileName = req.file.filename; // Get fileName from req.file
+
+    console.log('Received request to save recipe...'); // Debug message
+
     const { nombre, descripcion } = req.body;
     const username = getUsernameFromCookie(req);
 
@@ -112,15 +135,19 @@ app.post("/guardarReceta", upload.single('imagen'), async (req, res) => {
         const ingredientes = JSON.parse(req.body.ingredientes);
         const pasos = JSON.parse(req.body.pasos);
 
+        console.log('Parsed request body...'); // Debug message
+
         const maxCustomIDRecipe = await RecetaModel.findOne({}).sort({ customID: -1 });
         const maxCustomID = maxCustomIDRecipe ? maxCustomIDRecipe.customID : 0;
         const newCustomID = maxCustomID + 1;
+
+        console.log('New Custom ID:', newCustomID); // Debug message
 
         const newReceta = new RecetaModel({
             customID: newCustomID, // Use the new customID
             Username: username,
             Nombre: nombre,
-            Imagen: `food-images/${req.file.originalname}`,
+            Imagen: `uploads/${fileName}`,
             Descripcion: descripcion,
             Utensilios: utensilios,
             Ingredientes: ingredientes,
@@ -129,16 +156,16 @@ app.post("/guardarReceta", upload.single('imagen'), async (req, res) => {
 
         await newReceta.save();
 
-        console.log('Receta guardada exitosamente');
+        console.log('Receta guardada exitosamente'); // Success message
         res.status(201).json({ message: 'Receta guardada exitosamente' });
     } catch (err) {
-        console.error('Error al guardar la receta:', err);
+        console.error('Error al guardar la receta:', err); // Error message
         res.status(500).json({ error: 'Error al guardar la receta', errorMessage: err.message });
     }
 });
 
 
-
+// GET endpoint to fetch recipe by customID
 app.get('/getRecipe', async (req, res) => {
     const recipeId = req.query.id;
 
@@ -156,9 +183,16 @@ app.get('/getRecipe', async (req, res) => {
     }
 });
 
+// GET endpoint to fetch all recipes
 app.get("/getRecipes", async (req, res) => {
     try {
         const recipes = await RecetaModel.find({}, { _id: 0, __v: 0 });
+
+        // Update image paths
+        recipes.forEach(recipe => {
+            recipe.Imagen = `../${recipe.Imagen}`;
+        });
+
         res.status(200).json(recipes);
     } catch (error) {
         console.error('Error fetching recipes:', error);
@@ -191,7 +225,55 @@ app.get("/getUserInfo", async (req, res) => {
     }
 });
 
+const CommentsSchema = new mongoose.Schema({
 
+    customID: { type: Number, default: 1 },
+    username: String,
+    recipeID: Number,
+    text: String,
+    date: String
+});
+
+const CommentsModel = mongoose.model("comentarios", CommentsSchema);
+
+app.post("/saveComment", async (req, res) => {
+
+    const { text, recipeID, date } = req.body;
+    const username = getUsernameFromCookie(req);
+
+    try {
+
+        const maxCustomIDComment = await CommentsModel.findOne({}).sort({ customID: -1 });
+        const maxCustomID = maxCustomIDComment ? maxCustomIDComment.customID : 0;
+        const newCustomID = maxCustomID + 1;
+
+        const newComentario = new CommentsModel({
+            customID: newCustomID,
+            username: username,
+            recipeID: recipeID,
+            text: text,
+            date: date
+        });
+
+        await newComentario.save();
+
+        console.log('Comentario guardado exitosamente');
+        res.status(201).json({ message: 'Comentario guardado exitosamente' });
+    } catch (err) {
+        console.error('Error al guardar el comentario:', err);
+        res.status(500).json({ error: 'Error al guardar el comentario', errorMessage: err.message });
+    }
+});
+
+app.get('/getComments', async (req, res) => {
+    try {
+        const comments = await CommentsModel.find({}, { _id: 0, __v: 0 });
+        res.status(200).json(comments);
+    } catch (error) {
+        console.error('Error fetching recipes:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 app.listen(3000, () => {
     console.log("Server is running");

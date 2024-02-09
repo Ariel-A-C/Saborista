@@ -50,6 +50,7 @@ function eliminarCampo(button) {
 
 document.getElementById('recetaForm').addEventListener('submit', async function (event) {
     event.preventDefault();
+    console.log('Form submission initiated...'); // Debug message
 
     const nombre = document.getElementById('nombre').value;
     const descripcion = document.getElementById('descripcion').value;
@@ -60,18 +61,17 @@ document.getElementById('recetaForm').addEventListener('submit', async function 
     const formData = new FormData();
     formData.append('nombre', nombre);
     formData.append('descripcion', descripcion);
-
-    formData.append('customID', 'not_used'); // You can add a dummy value here
+    formData.append('customID', 'not_used');
 
     formData.append('utensilios', JSON.stringify(utensilios));
     formData.append('ingredientes', JSON.stringify(ingredientes));
     formData.append('pasos', JSON.stringify(pasos));
 
     const imageInput = document.getElementById('imagen');
-    formData.append('imagen', imageInput.files[0], imageInput.files[0].name);
-
+    formData.append('imagen', imageInput.files[0], `public/uploads/${imageInput.files[0].name}`);
 
     try {
+        console.log('Sending request to server...'); // Debug message
         const response = await fetch('http://localhost:3000/guardarReceta', {
             method: 'POST',
             headers: {
@@ -81,15 +81,15 @@ document.getElementById('recetaForm').addEventListener('submit', async function 
         });
 
         if (response.ok) {
-            console.log('Receta guardada exitosamente');
+            console.log('Receta guardada exitosamente'); // Debug message
             alert('Receta guardada exitosamente');
             window.location.href = 'recetas.html';
         } else {
-            console.error('Error al guardar la receta');
+            console.error('Error al guardar la receta'); // Error message
             alert('Error al guardar la receta');
         }
     } catch (err) {
-        console.error('Error al guardar la receta:', err);
-        res.status(500).json({ error: 'Error al guardar la receta', errorMessage: err.message });
+        console.error('Error al guardar la receta:', err); // Error message
+        alert('Error al guardar la receta. Verifique la conexión y vuelva a intentarlo.');
     }
 });
